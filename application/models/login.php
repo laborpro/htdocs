@@ -8,7 +8,6 @@
 class Model_login{
     // Данные для обработки POST запросов. В эту переменную мы будем передавать массив для обработки POST запроса;
     public $post_array;
-
     function __construct(){
 
     }
@@ -18,6 +17,7 @@ class Model_login{
         $_SESSION['name']= "";
         $_SESSION['text'] = "";
         $_SESSION['img'] = "";
+        $_SESSION['user_id'] = "";
     }
 
     // Метод который был вызван из контроллера с передачей параметров из POST запроса;
@@ -33,11 +33,13 @@ class Model_login{
 
         $query_result = $GLOBALS["db"]->row($sql);
         if($query_result) {
+            $_SESSION['user_id'] = $query_result["id"];
             $_SESSION['img'] = $query_result["img"];
             $_SESSION['name'] = $query_result["name"];
             $_SESSION['text'] = $query_result["text"];
             $flag = 1;
         } else {
+            $_SESSION['user_id'] = "";
             $_SESSION['img'] = "";
             $_SESSION['name']= "";
             $_SESSION['text'] = "";

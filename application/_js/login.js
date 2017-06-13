@@ -19,7 +19,9 @@ $(document).ready(function() {
                 var request_result = answer.result;
                 if(request_result == 1 ){
                      // успешно
-                    document.location.href = "http://localhost/list";
+
+                    window.location.href = window.location.href.replace(window.location.hostname ,window.location.hostname + '/list');
+
                 } else {
                     // если ошибка логин/пароль
                     $(".input").css("box-shadow", "0px 0px 5px 0px rgba(255,0,0,1)");
