@@ -31,6 +31,7 @@ class Controller_list extends Controller{
         $this->view = str_replace('<img id="list_images">', $img_string, $this->view);
         $this->view = str_replace('<div class="page_title"  id="list_name"></div>', $name_string, $this->view);
         $this->view = str_replace('<p id="list_text"></p>', $text_string, $this->view);
+
     }
 
     // Обычый метод;
