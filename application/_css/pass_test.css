@@ -1,0 +1,57 @@
+.control_test_item{
+    border: 1px solid black;
+    cursor: pointer;
+    padding: 5px 15px 5px 15px;
+    max-width: 700px;
+    margin: auto;
+    border-radius: 40px;
+    background-color: #8bc34a;
+}
+
+.control_test_item:hover{
+    background-color: #FFEB3B;
+}
+
+.test_question{
+    border: 1px solid;
+    padding: 10px;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 11px;
+    border-radius: 15px;
+    background-color: mintcream;
+}
+
+.test_answer{
+    border: 1px solid;
+    margin: 3px;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.test_answer:hover{
+    background-color: #8BC34A;
+}
+
+.selected_answer{
+    background-color: #00BCD4;
+}
+
+.unselected_answer{
+    background-color: #FFEB3B;
+}
+
+#test_block{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: #4CAF50;
+}
+
+#test{
+    overflow: auto;
+    max-height: 92%;
+}
