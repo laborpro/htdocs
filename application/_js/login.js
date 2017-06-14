@@ -1,46 +1,36 @@
-/*
-* ����� �� ����� ��������� ���������� JS �������;
-* */
-
+/**
+ * Created by root on 13.02.2017.
+ */
 $(document).ready(function() {
+    $(document).on("click", "#try_login", function () {
+        var login = $('#login_user_name').val();
+        var password = $('#login_user_password').val();
 
-    $(document).on("click", "#test_ajax_button", function () {
-        var login = $('#login').val();
-        var pass = $('#pass').val();
+        if(login == '' || password == ''){
+            message('Вы не ввели данные для авторизации', 'error');
+            return;
+        }
+
         $.ajax({
             type: "POST",
-            url: "/login/test_post_method",
-            data:   {
-                    login:login,
-                     pass:pass
-            },
+            url: "/login/try_login",
+            data: "login=" + login + "&password=" + password,
             success: function (answer) {
-                answer = jQuery.parseJSON(answer);
-                var request_result = answer.result;
-                if(request_result == 1 ){
-                     // успешно
+                var result = jQuery.parseJSON(answer);
+                var login_result = result.status;
+                var login_message = result.message;
 
-                    window.location.href = window.location.href.replace(window.location.hostname ,window.location.hostname + '/list');
-
-                } else {
-                    // если ошибка логин/пароль
-                    $(".input").css("box-shadow", "0px 0px 5px 0px rgba(255,0,0,1)");
-                    setTimeout(function() {
-                        $(".input").css("box-shadow", "0px 0px 5px 0px rgba(0,0,0,1)");
+                if(login_result == 'ok'){
+                    setTimeout(function(){
+                        window.location = "/main";
                     }, 3000);
                 }
 
+                message(login_message, login_result);
             },
             error: function () {
+                console.log('error');
             }
         });
     });
-
-    $(".enter_click").keypress(function(e){
-        if(e.keyCode==13){
-            $("#test_ajax_button").click();
-        }
-    });
-
-
 });

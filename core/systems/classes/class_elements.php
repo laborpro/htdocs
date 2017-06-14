@@ -52,10 +52,10 @@ class elements{
 
     public function company_item($caption, $id = '', $class = '', $style = '', $option = '', $can_delete = 1){
         $html = '<div class="list_item" id="'.$id.'" style="'.$style.'" '.$option.'>';
-        $html .= '<div style="display: inline-block;vertical-align: middle;">';
+        $html .= '<div style="vertical-align: middle;">';
         $html .= $this->button('Включить управление', '', 'company_turn_control '.$class, 'margin-right: 10px;margin-top: 5px;');
         $html .= '</div>';
-        $html .= '<div style="display: inline-block;vertical-align: middle;">';
+        $html .= '<div style="vertical-align: middle;">';
         $html .= $caption;
         $html .= '</div>';
         $html .= '</div>';
@@ -99,14 +99,4 @@ class elements{
 
         return $html;
     }
-
-
-
-//    public function avatar($id = '', $class = '', $style = '', $br = '', $option = ''){
-//        global $current_template;
-//        $img_name = "deactivated_200.png";
-//        $url ='/templates/' .$current_template . '/images/' . $img_name;
-//        $html = '<div class="avatar '.$class.'" src="'.$url.'" id="'.$id.'" style="'.$style.'" '.$option.'>';
-//        return $html;
-//    }
 }

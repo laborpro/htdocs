@@ -1,9 +1,13 @@
-<div class="page_title">Страница авторизации</div>
+<div class="page_title">Пройдите авторизацию</div>
 
-<div class="page_title">Введите логин и пароль</div>
+<div id="login_form">
+    <div class="caption" style="margin-top: 5px;">Имя пользователя</div>
+    <input type="text" id="login_user_name" class="input" style="text-align: center;"><br>
 
-<input type="text" id="login" class="input enter_click" placeholder="Логин" style="text-align: center; outline:none;" value=""><br>
+    <div class="caption" style="margin-top: 5px;">Пароль</div>
+    <input type="password" id="login_user_password" class="input" style="text-align: center;">
 
-<input type="text" id="pass" class="input enter_click" placeholder="Пароль" style="text-align: center; outline:none;" value=""><br>
+    <br>
 
-<div class="button" id="test_ajax_button">Вход</div>
+    <div class="button" id="try_login">Войти</div>
+</div>

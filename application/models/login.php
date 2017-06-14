@@ -6,52 +6,57 @@
  * Time: 15:07
  */
 class Model_login{
-    // Данные для обработки POST запросов. В эту переменную мы будем передавать массив для обработки POST запроса;
+    // Данные для обработки POST запросов;
     public $post_array;
+
     function __construct(){
-
+        //echo 'Это конструкционный метод вызванный подключение модели '.__CLASS__.'<br>';
     }
 
-//     Обучные метод который можем вызвать из модели:
-    public function out_session(){
-        $_SESSION['name']= "";
-        $_SESSION['text'] = "";
-        $_SESSION['img'] = "";
-        $_SESSION['user_id'] = "";
-    }
+    public function try_login(){
+        global $db;
 
-    // Метод который был вызван из контроллера с передачей параметров из POST запроса;
-    /**
-     *
-     */
-    public function test_post_method(){
-        // Достаем переменные из POST запроса;
-        $login = htmlspecialchars($this->post_array['login']);
-        $pass = htmlspecialchars($this->post_array['pass']);
+        $login = $this->post_array['login'];
+        $password = $this->post_array['password'];
 
-        $sql = "SELECT * FROM `users` WHERE `login`=\"" . $login . "\" AND `pass`=\"" . $pass . "\" ";
+        $sql = "SELECT `id`, `role_id`, `employee_id` FROM `users` WHERE `name` = '".$login."' AND `password` = '".md5($password)."';";
+        $login_data = $db->row($sql);
 
-        $query_result = $GLOBALS["db"]->row($sql);
-        if($query_result) {
-            $_SESSION['user_id'] = $query_result["id"];
-            $_SESSION['img'] = $query_result["img"];
-            $_SESSION['name'] = $query_result["name"];
-            $_SESSION['text'] = $query_result["text"];
-            $flag = 1;
-        } else {
-            $_SESSION['user_id'] = "";
-            $_SESSION['img'] = "";
-            $_SESSION['name']= "";
-            $_SESSION['text'] = "";
-            $flag = 0;
+        $result_array = array();
+
+        if($login_data['id'] != ''){
+            $login_date = date('Y-m-d H:i:s');
+            $sql = "UPDATE `users` SET `date_last_login` = '".$login_date."' WHERE `id` = '".$login_data['id']."';";
+            $db->query($sql);
+
+            $result_array['status'] = 'ok';
+            $result_array['message'] = 'Вы успешно прошли авторизацию';
+
+            $_SESSION['user_id'] = $login_data['id'];
+            $_SESSION['role_id'] = $login_data['role_id'];
+
+            // Так же, если пользователь определен к какой-то компании, то подключаем ее;
+            if($login_data['employee_id'] != ''){
+                // Определяем компанию;
+                $sql = "SELECT `item_id`  FROM `employees_items_node` WHERE `employe_id` = '".$login_data['employee_id']."';";
+                $item_id = $db->one($sql);
+
+                $sql = "SELECT `company_id` FROM `items_control` WHERE `id` = '".$item_id."';";
+                $company_id = $db->one($sql);
+
+                $sql = "SELECT * FROM `company` WHERE `id` = '".$company_id."';";
+                $company_data = $db->row($sql);
+
+                $_SESSION['control_company'] = $company_id;
+                $_SESSION['control_company_name'] = $company_data['short_name'];
+            }
+
+        }   else{
+            $result_array['status'] = 'error';
+            $result_array['message'] = 'Неверный логин или пароль!';
         }
 
-        $result = array(
-            'result' => $flag
-        );
-
-
-        // После обработки данных, результат выполнения мы обязательно должны вернуть данные с функцией die() что бы скрипт не вернул вместе с данными наше представление;
-        die(json_encode($result, true));
+        $result = json_encode($result_array, true);
+        die($result);
     }
 }

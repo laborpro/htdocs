@@ -7,6 +7,10 @@
  */
 class Model_error_404{
     function __construct(){
+        //echo 'Это конструкционный метод вызванный подключение модели '.__CLASS__.'<br>';
+    }
 
+    public function show_something_else(){
+        //echo 'Это результат выполнения метода модели вызванного из контроллера<br>';
     }
 }

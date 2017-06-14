@@ -2,10 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Simple Template</title>
+    <title>Labor Protection</title>
     <link rel="icon" type="/image/png" href="/templates/<?echo $current_template;?>/images/icon_core.png" />
     <link rel="stylesheet" href="/templates/<?echo $current_template;?>/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/templates/<?echo $current_template;?>/css/preloader.css" type="text/css" />
     <script type="application/javascript" src="/templates/<?echo $current_template;?>/js/jquery.js"></script>
+    <script type="application/javascript" src="/templates/<?echo $current_template;?>/js/functions.js"></script>
     <?
     // Здесь мы будем выводить блок в js переданные нам viewer;
     if(isset($viewer_js) && $viewer_js != ''){
@@ -14,18 +16,20 @@
     ?>
 </head>
 <body>
-
 <div id="header">
-    <div class="page_title">Какой-то общий заголовок</div>
-    <div id="menu">
-        <?
-        // Здесь мы будем выводит меню которое передал нам маршрутизатор;
-        if(isset($menu_viewer) && $menu_viewer != ''){
-            echo $menu_viewer;
-        }
-        ?>
-    </div>
+    <?
+    // Здесь мы будем выводит меню которое передал нам маршрутизатор;
+    if(isset($menu_viewer) && $menu_viewer != ''){
+        echo $menu_viewer;
+    }
+    ?>
 </div>
+
+<?
+if(isset($_SESSION['control_company_name'])){
+    ?><div class="control_company">Компания: <b><?echo $_SESSION['control_company_name'];?></b></div><?
+}
+?>
 
 <div id="body">
     <?
@@ -36,7 +40,28 @@
     ?>
 </div>
 
-<div id="bottom">Какой-то общий низ (мини-карта или копирайт)</div>
+<div id="bottom">
+    <div id="message"></div>
+
+    <div id="preloader">
+        <div class="cssload-container">
+            <div class="cssload-bouncywrap">
+                <div class="cssload-cssload-dotcon cssload-dc1">
+                    <div class="cssload-dot"></div>
+                </div>
+                <div class="cssload-cssload-dotcon dc2">
+                    <div class="cssload-dot"></div>
+                </div>
+                <div class="cssload-cssload-dotcon dc3">
+                    <div class="cssload-dot"></div>
+                </div>
+            </div>
+        </div>
+        <div id="preloader_text"></div>
+    </div>
+
+    <div style="margin: 10px;"><img src="/templates/<?echo $current_template;?>/images/icon_core.png" alt="logo"></div>
+</div>
 
 </body>
 </html>

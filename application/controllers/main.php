@@ -8,40 +8,17 @@
 class Controller_main extends Controller{
     // model, view и pointer - объявлены в родительском классе;
 
-    /*
-     * model - модель, отсюда мы можем вызывать ее методы или же корректировать публичные переменные;
-     * view - представление. Мы можем оставить его без ихменения, либо корректировать какими-то методами;
-     * pointer - указать. формируется из первой переданного маршрута;
-     * */
-
-    // Этот метод будет выполняться когда нам не передали никакого метода;
     public function exec_default(){
 
     }
 
-    // Обычый метод;
-    public function some_simple_method(){
-        // Здесь мы можем провести нужные операции;
-
-        // Вызвать метод из модели получив данные;
-        $model_data = $this->model->some_simple_method();
-
-        // Например с представлением;
-        $this->view = str_replace('%some_var%', $model_data, $this->view);
+    public function show_something(){
+        //echo 'Метод выполняется в контроллере вызванные маршрутом '.__FUNCTION__.'<br>';
+        // Предположим что этот метод должен вызвать метод из модели;
+        $this->model->show_something_else();
     }
 
-
-    /*
-     * Если нам метод вызывается из вне по средствам (например) AJAX и принимает $_POST данные, нам нужно их принять переменно метода;
-     * */
-    // Пример метода, который будет вызываться из вне, и принимать какие-либо данные через $_POST запрос;
-    public function some_post_method($post_data){
-        // Записываем массив с данными в модель;
-        $this->model->post_array = $post_data;
-
-        // Запускаем метод модели, который обработае POST данные;
-        $this->model->some_post_method();
+    public function change_viewer(){
+        $this->view = str_replace('%some_var%', (isset($this->pointer) && $this->pointer != '' ? $this->pointer : 'CHANGED'), $this->view);
     }
-
-
 }

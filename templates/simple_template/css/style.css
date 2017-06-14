@@ -6,26 +6,20 @@ body{
     padding: 50px 0px 50px 0px;
 }
 
-#menu{
-    padding: 10px;
-    text-align: center;
-    background-color: #8BC34A;
-    width: 100%;
-    right: 0px;
-}
-
 #header{
-    padding: 10px;
-    text-align: center;
     background-color: #8BC34A;
-    position: fixed;
+    text-align: end;
+    position: absolute;
     width: 100%;
     top: 0px;
     right: 0px;
+    /*background-color: rgba(156, 133, 255, 0.46);*/
+    margin-right: 1px;
+    border-bottom: 1px solid black;
 }
 
 #body{
-    padding: 60px 0px 25px 0px;
+    padding: 10px 0px 25px 0px;
     text-align: center;
     background-color: aliceblue;
     height: 100%;
@@ -44,6 +38,17 @@ body{
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 8px;
+}
+
+.input{
+    height: 38px;
+    width: 300px;
+    border-radius: 40px;
+    border: 0px solid black;
+    padding-left: 13px;
+    padding-right: 13px;
+    margin-left: 4px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
 }
 
 .button{
@@ -74,33 +79,84 @@ body{
     margin-bottom: 4px;
 }
 
+.menu_button{
+    background-color: #8bc34a;
+    min-width: 200px;
+    padding: 10px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+    color: black;
+    width: auto;
+    max-width: 250px;
+    display: inline-block;
+    font-size: 17px;
+    margin-left: -8px;
+}
+
+.menu_button:hover{
+    background-color: #e1ffbe;
+}
+
+
+#message{
+    /*background-color: rgba(156, 133, 255, 0.46);*/
+    padding: 8px;
+    font-size: 16px;
+    display: none;
+}
+
+#preloader{
+    /* background-color: rgba(156, 133, 255, 0.46); */
+    /* padding: 8px; */
+    font-size: 16px;
+    display: none;
+    min-height: 20px;
+    margin-top: 23px;
+}
+
+#preloader_text{
+    padding-top: 24px;
+}
+
+.control_company{
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+    top: 41px;
+    background-color: #8bc34a;
+    padding: 10px;
+    border-radius: 0px 0px 0px 15px;
+    /* border: 1px solid black; */
+}
+
+.list_item{
+    background-color: rgb(255, 153, 84);
+    max-width: 800px;
+    padding: 13px;
+    margin: 7px;
+    cursor: pointer;
+    /*display: inline-grid;*/
+}
+
+select{
+    height: 38px;
+    text-align: center;
+    padding: 9px;
+    border-radius: 40px;
+    border: 0px solid black;
+    min-width: 300px;
+    cursor: pointer;
+    appearance:none;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    background: url(/templates/simple_template/images/icons/arrow_down.png) no-repeat right #ffffff;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
+}
+
 .small_title{
     font-size: 17px;
     font-weight: bold;
     margin: 8px;
-}
-
-.input{
-    height: 38px;
-    width: 300px;
-    border-radius: 40px;
-    border: 0px solid black;
-    padding-left: 13px;
-    padding-right: 13px;
-    margin-left: 4px;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,1);
-}
-
-.menu_button{
-    display: inline-block;
-    text-decoration: none;
-    background-color: #CDDC39;
-    padding: 8px 16px 8px 16px;
-    border-radius: 40px;
-    color: black;
-    margin: -5px 5px -5px 5px;
-}
-
-.menu_button:hover{
-    background-color: #f8ffb0;
 }
