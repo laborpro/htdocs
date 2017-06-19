@@ -5,23 +5,34 @@
  * Date: 15.02.2017
  * Time: 23:10
  */
-$sql = "
-            SELECT CONCAT_WS(' ', `surname`, `employees`.`name`, `second_name`) AS `fio`, `birthday`, GROUP_CONCAT(`items_control`.`name`) AS `items`, `company`.`name` AS `company_name`
-            FROM `employees`, `employees_items_node`, `items_control`, `company`
+
+$sql = "SELECT `employees`.`id`, CONCAT_WS(' ', `surname`, `employees`.`name`, `second_name`) AS `fio`, GROUP_CONCAT( CONCAT_WS(': ', `items_control_types`.`name`, `items_control`.`name`)SEPARATOR '; ') AS `items`, `company`.`name` AS `company_name`,`employees`.`birthday`
+				FROM `employees`, `employees_items_node`,`items_control_types` , `items_control`
+				LEFT JOIN `company` ON `company`.`id`= `items_control`.`company_id`
             WHERE `employees`.`id` IN (".implode(', ', $employees_array).")
             AND `employees`.`id` = `employees_items_node`.`employe_id`
             AND `employees_items_node`.`item_id` = `items_control`.`id`
-            AND `items_control`.`company_id` = `company`.`id`
-            GROUP BY `employees`.`id`
-        ";
+            AND `items_control`.`type_id` = `items_control_types`.`id`
+            AND `items_control_types`.`id` IN(2,3)
+            GROUP BY `employees`.`id`";
+//echo $sql;
 $employees_data = $db->all($sql);
 
 $table_line = '';
 
 $company_name = '';
+//
+//$employee_array = explode(';', $employee['items']);
+//$employee['items'] = '';
 
 foreach($employees_data as $key => $employee_item){
+//    echo $employee_item['items'][0];
+//    print_r($employee_item['items']);
+    $employee_array = explode(';', $employee_item['items']);
+
     $company_name = $employee_item['company_name'];
+//    echo $employee_array[0] . " - 0";
+//    echo $employee_array[1] . " - 1";
     $table_line .= '
                     <tr>
                     <td width="48">
@@ -34,10 +45,10 @@ foreach($employees_data as $key => $employee_item){
                     '.$systems->get_local_date_time($employee_item['birthday']).'
                     </td>
                     <td width="150">
-                    '.$employee_item['items'].'
+                    '.  str_replace('Должность:', "", $employee_array[0]).'
                     </td>
                     <td width="157">
-                    '.$employee_item['items'].'
+                    '.  str_replace('Отдел:', "", $employee_array[1]).'
                     </td>
                     <td width="192">
                     <p>&nbsp;</p>

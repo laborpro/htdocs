@@ -17,7 +17,7 @@ class Model_documents_download{
         //echo 'Это результат выполнения метода модели вызванного из контроллера<br>';
     }
 
-    // Строимс псиок документов
+    // Строим список документов
     public function get_doc_list(){
         global $elements;
 
@@ -30,19 +30,19 @@ class Model_documents_download{
         return $html;
     }
 
-    // Строимс писок сотрудников;
+    // Строим список сотрудников;
     public function get_employees_list(){
         global $db, $elements;
 
-        $sql = "
-            SELECT `employees`.`id`, CONCAT_WS(' ', `surname`, `employees`.`name`, `second_name`) AS `fio`, GROUP_CONCAT(`items_control`.`name`) AS `items`
-            FROM `employees`, `employees_items_node`, `items_control`
+        $sql = "SELECT `employees`.`id`, CONCAT_WS(' ', `surname`, `employees`.`name`, `second_name`) AS `fio`, GROUP_CONCAT( CONCAT_WS(': ', `items_control_types`.`name`, `items_control`.`name`)SEPARATOR '; ') AS `items`
+            FROM `employees`, `employees_items_node`,`items_control_types` , `items_control`
             WHERE `employees`.`id` = `employees_items_node`.`employe_id`
+            AND `employees`.`id` = `employees_items_node`.`employe_id`
             AND `employees_items_node`.`item_id` = `items_control`.`id`
+            AND `items_control`.`type_id` = `items_control_types`.`id`
             AND `employees`.`status` != 0
             AND `items_control`.`company_id` = '".$_SESSION['control_company']."'
-            GROUP BY `employees`.`id`
-        ";
+            GROUP BY `employees`.`id`";
         $employees = $db->all($sql);
 
         $html = '';
@@ -51,7 +51,17 @@ class Model_documents_download{
             $html .= $elements->small_title('У вас нет сотрудников в управляемой компании. Добавите их и вернитесь в этот раздел.');
         }   else{
             foreach($employees as $employee){
-                $html .= $elements->item_with_checkbox('ФИО: <b>'.$employee['fio'].'</b><br>'.$employee['items'], 'employee_' . $employee['id'], '', '', 'employee_id=' . $employee['id']);
+
+                // разобрали, накинули теги и собрали
+                $employee_array = explode(';', $employee['items']);
+                $employee['items'] = '';
+                foreach ($employee_array as $value) {
+                    $values = explode(':', $value);
+                    $values[0] = '<b>'. $values[0] .': </b>';
+                    $employee['items'] .= $values[0] .$values[1] . '<b>;</b>';
+                }
+
+                $html .= $elements->item_with_checkbox('ФИО: <b>'.$employee['fio'].'</b><br>' . $employee['items'], 'employee_' . $employee['id'], '', '', 'employee_id=' . $employee['id']);
             }
         }
 

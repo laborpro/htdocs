@@ -2,15 +2,17 @@
  * Created by root on 14.03.2017.
  */
 $(document).ready(function() {
-
+    var write_doc = 0;
     $(document).on("click", ".control_test_item", function () {
         // Начинаем прохождение теста;
         var test_id = $(this).attr('test_id');
-
         $.ajax({
             type: "POST",
             url: "/pass_test/start",
-            data: "test_id=" + test_id,
+            data: {
+                  test_id:test_id,
+                write_doc:write_doc
+                },
             success: function (answer) {
 
                 var result = jQuery.parseJSON(answer);
@@ -18,10 +20,12 @@ $(document).ready(function() {
                 var request_message = result.message;
                 var content = result.content;
 
-
-
                 if(request_result == 'ok'){
-                    $('#test_block').fadeIn(200).html(content);
+                    $(".page_title").css("display","none");
+                    $(".control_test_item").css("display","none");
+                    $("body").css("margin-top","-20px");
+                    $('#test_block').fadeIn(200);
+                    $('#content_box').html(content);
                 }
 
                 message(request_message, request_result);
@@ -103,8 +107,43 @@ $(document).ready(function() {
 
     });
 
+
     $(document).on("click", "#close_test", function () {
         location.reload();
+    });
+
+    $(document).on("click", "#go_to_testing", function () {
+
+        write_doc = 1;
+        var test_id = $(this).attr('test_id');
+        // Начинаем прохождение теста;
+        $.ajax({
+            type: "POST",
+            url: "/pass_test/start",
+            data: {
+                test_id:test_id,
+                write_doc:write_doc
+            },
+            success: function (answer) {
+
+                var result = jQuery.parseJSON(answer);
+                var request_result = result.status;
+                var request_message = result.message;
+                var content = result.content;
+
+                if(request_result == 'ok'){
+                    $(".page_title").css("display","none");
+                    $(".control_test_item").css("display","none");
+                    $("body").css("margin-top","0px");
+                    $('#test_block').fadeIn(0);
+                    $('#content_box').html(content);
+                    $("html, body").animate({ scrollTop: 0 }, 0);
+                }
+                message(request_message, request_result);
+            },
+            error: function () {
+            }
+        });
     });
 
 

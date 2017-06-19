@@ -48,21 +48,25 @@ class Model_pass_test{
 
     // Начинаем прохождение тестирования;
     public function start(){
-        global $db;
+        global $db, $elements;
 
         $test_id = $this->post_array['test_id'];
-
+        $write_doc = $this->post_array['write_doc'];
         $sql = "SELECT * FROM `control_tests` WHERE `id` = '".$test_id."';";
         $test_data = $db->row($sql);
+        if($test_data['preread_doc'] != '' && ($write_doc == 0) ){
+            $result = file_get_contents(ROOT_PATH.'/application/test_docs/'.$test_data['preread_doc']);
+            // правим пути к рисункам
+            $img_link = 'SRC="/application/test_docs/';
+            $result = str_replace('SRC="', $img_link, $result);
+            // Создали кнопку
+            $result .= $elements->button('Я ознакомился с документом, перейти к тестированнию', 'go_to_testing','','','', 'test_id ="'. $test_id .'"' );
 
-        // Если у нас есть документ который надо прочитать - грузим его или начинаем тестирование;
-        if($test_data['preread_doc'] != ''){
-            // Грузим документ для прочтения;
-            $result = file_get_contents(ROOT_PATH.'/application/test_docs/'.$test_data['preread_doc'], FILE_USE_INCLUDE_PATH);
-            //echo ROOT_PATH.'/application/test_docs/'.$test_data['preread_doc'];
+//           $result = mb_convert_encoding($result, 'utf-8', 'cp1251');
+
             $result_array['message'] = 'Сначала ознакомитесь с содержанием представленного документа, а затем начнется тестирование.';
 
-        }   else{
+        }  else {
             // Если текст для прочтения нет - начинаем тестирование;
             $result = $this->test_try($test_id, $test_data['test_name']);
 
@@ -89,28 +93,39 @@ class Model_pass_test{
 
         // Поулчаем списко вопросов;
         $sql = "SELECT * FROM `control_tests_questions` WHERE `test_id` = '".$test_id."';";
+//        echo $sql;
         $questions = $db->all($sql);
-
         $questions_id_array = array();
 
         foreach($questions as $question){
+//            echo $question['id'];
             $questions_id_array[] = $question['id'];
         }
 
         // УЗнаем, сколько нам надо показать пользователю вопросов;
         $sql = "SELECT `questions_count` FROM `control_tests` WHERE `id` = '".$test_id."';";
         $need_count = $db->one($sql);
-
         // Если задано какое-то число;
+
+
         if($need_count != 0){
             // Получаем все ID вопросов;
-            $questions_id_array = array_rand($questions_id_array, $need_count);
+            $keys = array_rand($questions_id_array,$need_count);
+
+            foreach ($keys as $key=>$value) {
+                $questions_id_array[$key] = $questions_id_array[$value];
+            }
         }
 
-        // Получаем список ответов;
-        $sql = "SELECT * FROM `control_tests_answers` WHERE `question_id` IN (".implode(',', $questions_id_array).");";
-        $answers_array = $db->all($sql);
 
+
+
+        // Получаем список ответов;
+
+
+        $sql = "SELECT * FROM `control_tests_answers` WHERE `question_id` IN (".implode(',', $questions_id_array).");";
+//        echo $sql;
+        $answers_array = $db->all($sql);
         $answers = array();
 
         // Немного переработает массив с вариантами ответов;
@@ -121,7 +136,6 @@ class Model_pass_test{
                     'answer_text' => $answer_item['answer_text']
                 );
         }
-
         // После формирования массива с вариантами ответов, формируем список вопросов;
         foreach($questions as $question){
             // Исключаем вопросы которые мы могли ограничить;

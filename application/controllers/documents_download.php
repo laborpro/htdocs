@@ -24,7 +24,7 @@ class Controller_documents_download extends Controller{
 
     // Загурзка докуметов;
     public function download($post_data){
-        // Записываем массив с даннми в домель;
+        // Записываем массив с даннми в модель;
         $this->model->post_array = $post_data;
 
         // Запускаем метод;
