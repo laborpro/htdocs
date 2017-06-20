@@ -3,9 +3,11 @@
  */
 $(document).ready(function() {
     var write_doc = 0;
-    $(document).on("click", ".control_test_item", function () {
+
+
+    //$(document).on("click", ".control_test_item", function () {
         // Начинаем прохождение теста;
-        var test_id = $(this).attr('test_id');
+        var test_id = $("#start_test").attr('test_id');
         $.ajax({
             type: "POST",
             url: "/pass_test/start",
@@ -23,17 +25,20 @@ $(document).ready(function() {
                 if(request_result == 'ok'){
                     $(".page_title").css("display","none");
                     $(".control_test_item").css("display","none");
-                    $("body").css("margin-top","-20px");
-                    $('#test_block').fadeIn(200);
+                    $("#test_block").css("margin-top","-40px");
+                    $("#content_box").css("padding-top","40px")
+                    $('#test_block').fadeIn(0);
                     $('#content_box').html(content);
+
                 }
 
                 message(request_message, request_result);
+
             },
             error: function () {
             }
         });
-    });
+    //});
 
 
     $(document).on("click", ".test_answer", function () {
@@ -41,6 +46,17 @@ $(document).ready(function() {
             $(this).removeClass('selected_answer');
             $(this).addClass('unselected_answer');
         });
+        // шапокляк для progress_bar_items
+        var answer_count = 1;
+        $('.selected_answer').each(function(index){
+            answer_count++;
+        });
+        $(".progress_bar_item").each(function(index) {
+            if(index<answer_count) {
+                $(this).css("background-color", "#00BCD4");
+            }
+        });
+        // шапокляк end
 
         $(this).removeClass('unselected_answer');
         $(this).addClass('selected_answer');
@@ -146,5 +162,19 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on("click", "#down", function () {
+        window.scrollBy(0, 200);
+    });
+    $(document).on("click", "#up", function () {
+        window.scrollBy(0, -200);
+    });
+
+    // скрипт для progress_bar_line
+    $(window).on("scroll resize", function() {
+        var o = $(window).scrollTop() / ($(document).height() - $(window).height());
+        $(".progress_bar_line_back").css({
+            "width": (100 * o | 0) + "%"
+        });
+    })
 
 });

@@ -20,10 +20,23 @@ $(document).ready(function() {
                 var login_result = result.status;
                 var login_message = result.message;
 
-                if(login_result == 'ok'){
+                if(login_result == 'company'){
                     setTimeout(function(){
                         window.location = "/main";
-                    }, 3000);
+                    }, 2000);
+                }
+                // если сотрудник кидаем на текст
+                if(login_result == 'employee'){
+                    setTimeout(function(){
+                        window.location = "/pass_test";
+                    }, 2000);
+                }
+
+                // если сотрудник прошол все тесты
+                if(login_result == 'dead_end'){
+                    setTimeout(function(){
+                        window.location = "/dead_end";
+                    }, 2000);
                 }
 
                 message(login_message, login_result);

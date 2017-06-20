@@ -35,12 +35,13 @@ class Model_pass_test{
                 $try_html .= '<br>';
                 if($try_data['date_end'] != ''){
                     $try_html .= 'Тестирование было успешно пройдено.';
+
                 }   else{
                     $try_html .= 'Тестирование не было закончено или пройдено.';
                 }
             }
 
-            $result = '<div class="control_test_item" test_id="'.$control_tests_item['id'].'"><b>'.$control_tests_item['test_name'].'</b>'.$try_html.'</div>';
+            $result = '<div class="control_test_item" id="start_test" test_id="'.$control_tests_item['id'].'"><b>'.$control_tests_item['test_name'].'</b>'.$try_html.'</div>';
         }
 
         return $result;
@@ -61,7 +62,11 @@ class Model_pass_test{
             $result = str_replace('SRC="', $img_link, $result);
             // Создали кнопку
             $result .= $elements->button('Я ознакомился с документом, перейти к тестированнию', 'go_to_testing','','','', 'test_id ="'. $test_id .'"' );
-
+            // прогресс бар с количеством вопросов($need_count);
+            $result .= $elements->progress_bar_line('Прогресс');
+            // навигация
+            $result .= $elements->nav_button('Вверх', 'up');
+            $result .= $elements->nav_button('Вниз', 'down');
 //           $result = mb_convert_encoding($result, 'utf-8', 'cp1251');
 
             $result_array['message'] = 'Сначала ознакомитесь с содержанием представленного документа, а затем начнется тестирование.';
@@ -160,9 +165,15 @@ class Model_pass_test{
             $result .= '</div>';
             $result .= '<br>';
         }
+        // прогресс бар с количеством вопросов($need_count);
+        $result .= $elements->progress_bar('Прогресс', $need_count);
+        // навигация
+        $result .= $elements->nav_button('Вверх', 'up');
+        $result .= $elements->nav_button('Вниз', 'down');
         // Снопка для завершения тестированияж
         $result .= $elements->button('Завершить тестирование', 'finish_test');
         $result .= $elements->button('Закрыть тест', 'close_test');
+
 
         $result .= '</div>';
 

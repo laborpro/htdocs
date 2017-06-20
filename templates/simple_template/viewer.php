@@ -27,7 +27,7 @@
 
 <?
 if(isset($_SESSION['control_company_name'])){
-    ?><div class="control_company">Компания: <b><?echo $_SESSION['control_company_name'];?></b></div><?
+    ?><div class="control_company"  <? if( $_SESSION['role_id'] == 3) {echo 'style="display: none"';}?> >Компания: <b><?echo $_SESSION['control_company_name'];?></b></div><?
 }
 ?>
 
@@ -60,7 +60,7 @@ if(isset($_SESSION['control_company_name'])){
         <div id="preloader_text"></div>
     </div>
 
-    <div style="margin: 10px;"><img src="/templates/<?echo $current_template;?>/images/icon_core.png" alt="logo"></div>
+<!--    <div style="margin: 10px;"><img src="/templates/--><?//echo $current_template;?><!--/images/icon_core.png" alt="logo"></div>-->
 </div>
 
 </body>

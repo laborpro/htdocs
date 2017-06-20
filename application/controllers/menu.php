@@ -33,7 +33,7 @@ class Controller_menu extends Controller{
             }
 
             if($_SESSION['role_id'] == 3){
-                $login_buttons = '<a href="/pass_test"><div class="menu_button">Пройти тестирование</div></a>';
+//                $login_buttons = '<a href="/pass_test"><div class="menu_button">Пройти тестирование</div></a>';
             }
 
             $login_buttons .= '<a href="/exit"><div class="menu_button">Выход</div></a>';
@@ -46,5 +46,9 @@ class Controller_menu extends Controller{
         }
 
         $this->view = str_replace('%users_buttons%', $login_buttons, $this->view);
+        if($_SESSION['role_id'] == 3){
+            $glav ='<a href="/main"><div class="menu_button">Главная страница</div></a>';
+            $this->view = str_replace($glav, "", $this->view);
+        }
     }
 }

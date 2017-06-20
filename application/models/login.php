@@ -29,7 +29,7 @@ class Model_login{
             $sql = "UPDATE `users` SET `date_last_login` = '".$login_date."' WHERE `id` = '".$login_data['id']."';";
             $db->query($sql);
 
-            $result_array['status'] = 'ok';
+            $result_array['status'] = 'company';
             $result_array['message'] = 'Вы успешно прошли авторизацию';
 
             $_SESSION['user_id'] = $login_data['id'];
@@ -50,6 +50,22 @@ class Model_login{
                 $_SESSION['control_company'] = $company_id;
                 $_SESSION['control_company_name'] = $company_data['short_name'];
             }
+             if($login_data['role_id']==3){// сотрудник
+                     $sql = "SELECT * FROM `control_tests` WHERE `company_id` = '".$company_id."';";
+                     $control_test_array = $db->all($sql);
+                     foreach($control_test_array as $control_tests_item) {
+                         // Проверяем проходил ли пользователь это тестирование;
+                         $sql = "SELECT `date_start`, `date_end` FROM `control_tests_try_results` WHERE `test_id` = '" . $control_tests_item['id'] . "' ORDER BY `date_start` DESC LIMIT 1;";
+                         $try_data = $db->row($sql);
+                         if ($try_data['date_start'] != '') {
+                             if ($try_data['date_end'] != '') {
+                                 $result_array['status'] = 'dead_end';// сотрудник, отправляем на тесты
+                             } else {
+                                 $result_array['status'] = 'employee';// сотрудник, тестов нет
+                             }
+                         }
+                     }
+             }
 
         }   else{
             $result_array['status'] = 'error';

@@ -14,6 +14,7 @@ class Controller_pass_test extends Controller{
 
         // Рисуем его в списке;
         $this->view = str_replace('%tests_list%', $test_list, $this->view);
+
     }
 
     // Начало выполнения теста;

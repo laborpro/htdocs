@@ -99,4 +99,42 @@ class elements{
 
         return $html;
     }
+
+    public function nav_button($caption = '', $class = ''){
+        global $current_template;
+        $html = '';
+        if ($caption != ''){
+            $html = '<div  class="'.$class.'"><div>' .$caption. '</div><img src="/templates/' . $current_template . '/images/down.svg"></div>';
+        }
+        if ($class == 'up'){
+            $html = '<div id="up" class="'.$class.'"><img src="/templates/' . $current_template . '/images/down.svg"><div>' .$caption. '</div></div>';
+        }
+        if ($class == 'down'){
+            $html = '<div id="down" class="'.$class.'"><div>' .$caption. '</div><img src="/templates/' . $current_template . '/images/down.svg"></div>';
+        }
+
+        return $html;
+    }
+
+
+    public function progress_bar($caption = '', $items= ' '){
+        $html = '';
+        if ($items != ''){
+            $html = '<div class="progress_bar" id="progress_bar"><div class="progress_bar_title">'.$caption.'</div><div class="progress_bar_items">';
+            for ($i = 1; $i <= $items; $i++) {
+                $html.= '<div class="progress_bar_item"></div>';
+            }
+            $html .= '</div></div>';
+        }
+        return $html;
+    }
+    public function progress_bar_line($caption = ''){
+
+            $html = '<div class="progress_bar_line" id="progress_bar_line">';
+            $html .= '<div class="progress_bar_title_line">'.$caption.'</div>';
+            $html .= '<div class="progress_bar_line_front"><div class="progress_bar_line_back"></div></div>';
+            $html .= '</div>';
+
+        return $html;
+    }
 }
