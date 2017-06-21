@@ -20,6 +20,7 @@ class Model_pass_test{
         $sql = "SELECT * FROM `control_tests` WHERE `company_id` = '".$_SESSION['control_company']."';";
         $control_test_array = $db->all($sql);
 
+
         $result = '';
 
         foreach($control_test_array as $control_tests_item){
@@ -40,7 +41,7 @@ class Model_pass_test{
                     $try_html .= 'Тестирование не было закончено или пройдено.';
                 }
             }
-
+            $_SESSION['test_name'] = $control_tests_item['test_name'];
             $result = '<div class="control_test_item" id="start_test" test_id="'.$control_tests_item['id'].'"><b>'.$control_tests_item['test_name'].'</b>'.$try_html.'</div>';
         }
 
@@ -55,6 +56,7 @@ class Model_pass_test{
         $write_doc = $this->post_array['write_doc'];
         $sql = "SELECT * FROM `control_tests` WHERE `id` = '".$test_id."';";
         $test_data = $db->row($sql);
+        $test_name_box = $test_data['test_name'];
         if($test_data['preread_doc'] != '' && ($write_doc == 0) ){
             $result = file_get_contents(ROOT_PATH.'/application/test_docs/'.$test_data['preread_doc']);
             // правим пути к рисункам
@@ -62,8 +64,10 @@ class Model_pass_test{
             $result = str_replace('SRC="', $img_link, $result);
             // Создали кнопку
             $result .= $elements->button('Я ознакомился с документом, перейти к тестированнию', 'go_to_testing','','','', 'test_id ="'. $test_id .'"' );
+            // информационный блок
+            $result .= $elements->info_box("Информированние",$test_data['preread_doc'] ,$_SESSION['employee_id'],$_SESSION['$employee_full_name']);
             // прогресс бар с количеством вопросов($need_count);
-            $result .= $elements->progress_bar_line('Прогресс');
+            $result .= $elements->progress_bar_line();
             // навигация
             $result .= $elements->nav_button('Вверх', 'up');
             $result .= $elements->nav_button('Вниз', 'down');
@@ -165,8 +169,12 @@ class Model_pass_test{
             $result .= '</div>';
             $result .= '<br>';
         }
-        // прогресс бар с количеством вопросов($need_count);
-        $result .= $elements->progress_bar('Прогресс', $need_count);
+        global $test_name_box;
+        // информационный блок
+//        $result .= $elements->info_box("",$test_name_box,$_SESSION['employee_id'],"");
+        $result .= $elements->info_box("Тестированние",$_SESSION['test_name'],$_SESSION['employee_id'],$_SESSION['$employee_full_name']);
+        // прогресс бар с количеством вопросов($need_count)
+        $result .= $elements->progress_bar($need_count);
         // навигация
         $result .= $elements->nav_button('Вверх', 'up');
         $result .= $elements->nav_button('Вниз', 'down');

@@ -7,7 +7,7 @@ body{
 }
 
 #header{
-    background-color: #8BC34A;
+    background-color: #f0f8ff;
     text-align: end;
     position: fixed;
     width: 100%;
@@ -165,7 +165,7 @@ select{
     position: fixed;
     height: 75px;
     width: 70px;
-    top: 140px;
+    top: 150px;
     right: 190px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -193,7 +193,7 @@ select{
     position: fixed;
     height: 75px;
     width: 70px;
-    top: 60px;
+    top: 70px;
     right: 190px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -226,8 +226,10 @@ select{
 }
 #progress_bar{
     position: fixed;
-    top: 0px;
-    height: 55px;
+    top: 41px;
+    height: 24px;
+    padding-top: 4px;
+    box-sizing: border-box;
     left: 190px;
     right: 190px;
     background-color: #fff;
@@ -246,7 +248,8 @@ select{
 .progress_bar_item{
     border: 1px solid #91dc5a;
     margin: 5px;
-    height: 20px;
+    margin-top: 0px;
+    height: 10px;
     width: 30px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -259,17 +262,19 @@ select{
 
 #progress_bar_line{
     position: fixed;
-    top: 0px;
-    height: 55px;
+    top: 41px;
+    height: 24px;
+    padding-top: 4px;
+    box-sizing: border-box;
     left: 190px;
     right: 190px;
     background-color: #fff;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border: 2px solid #91dc5a;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
-    border-radius: 4px;
+    border-radius: 4px
 }
 
 .progress_bar_title_line{
@@ -279,7 +284,7 @@ select{
 .progress_bar_line_front{
     margin: 0 auto;
     border: 1px solid #91dc5a;
-    height: 20px;
+    height: 10px;
     width: 80%;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -289,4 +294,53 @@ select{
     height: 100%;
     background-color: #00BCD4;
     width: 3px;
+}
+
+#info_box{
+    position: fixed;
+    top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    left: 190px;
+    right: 224px;
+    box-sizing: border-box;
+}
+.info_box{
+    background-color: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding-top: 5px;
+    box-sizing: border-box;
+    height: 30px;
+    width: 250px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: 2px solid #c6c7c6
+}
+.info_box_id{
+    width: 50px;
+}
+.info_box_type{
+    width: 170px;
+}
+.info_box_fio{
+    width: 200px;
+    margin-right: 5px;
+}
+.info_box_doc{
+    width: 480px;
+}
+.progress_count{
+    box-sizing: border-box;
+    height: 15px;
+    position: absolute;
+    left: 20px;
+    top: 2px;
+}
+.progress_line_proc{
+    left: 20px;
+    position: absolute;
+    top: 2px;
 }

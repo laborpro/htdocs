@@ -86,6 +86,18 @@ class MySQL {
         $this->free();
         return $this->data;
     }
+    // Иницыалы
+    function row_fullname($id, $type = false) {
+        $sql ="SELECT CONCAT (`employees`.`surname`, ' ',left(`employees`.`name`,1), '.',left(`employees`.`second_name`,1), '.') AS `fullname`
+                         FROM `employees`
+                         WHERE `employees`.`id` =".$id ;
+        $this->data = array();
+        if ($this->query($sql)) {
+            $this->data = mysqli_fetch_array($this->query_id, MYSQLI_ASSOC);
+        }
+        $this->free();
+        return $this->data['fullname'];
+    }
     
     // Загрузка столбца;
     function col($sql) {

@@ -26,11 +26,13 @@ $(document).ready(function() {
                     $(".page_title").css("display","none");
                     $(".control_test_item").css("display","none");
                     $("#test_block").css("margin-top","-40px");
-                    $("#content_box").css("padding-top","40px")
+                    $("#content_box").css("padding-top","65px")
                     $('#test_block').fadeIn(0);
                     $('#content_box').html(content);
 
                 }
+
+
 
                 message(request_message, request_result);
 
@@ -51,6 +53,16 @@ $(document).ready(function() {
         $('.selected_answer').each(function(index){
             answer_count++;
         });
+
+        var test_question = 1;
+        $('.test_question').each(function(){
+            test_question++;
+        });
+        $('.progress_plan').html("");
+        $('.progress_plan').html(test_question);
+
+        $('.progress_fact').html("");
+        $('.progress_fact').html(answer_count);
         $(".progress_bar_item").each(function(index) {
             if(index<answer_count) {
                 $(this).css("background-color", "#00BCD4");
@@ -171,10 +183,13 @@ $(document).ready(function() {
 
     // скрипт для progress_bar_line
     $(window).on("scroll resize", function() {
-        var o = $(window).scrollTop() / ($(document).height() - $(window).height());
+        var proc = $(window).scrollTop() / ($(document).height() - $(window).height());
         $(".progress_bar_line_back").css({
-            "width": (100 * o | 0) + "%"
+            "width": (100 * proc | 0) + "%"
         });
+        $('.progress_line_proc').html("");
+        $('.progress_line_proc').html((100*proc|0) + "%");
+
     })
 
 });

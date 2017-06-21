@@ -117,10 +117,11 @@ class elements{
     }
 
 
-    public function progress_bar($caption = '', $items= ' '){
+    public function progress_bar( $items= ' '){
         $html = '';
         if ($items != ''){
-            $html = '<div class="progress_bar" id="progress_bar"><div class="progress_bar_title">'.$caption.'</div><div class="progress_bar_items">';
+            $html = '<div class="progress_bar" id="progress_bar"><div class="progress_bar_items">';
+            $html .= '<div class="progress_count"><span class="progress_fact">0</span>/<span class="progress_plan">0</span></div>';
             for ($i = 1; $i <= $items; $i++) {
                 $html.= '<div class="progress_bar_item"></div>';
             }
@@ -128,12 +129,19 @@ class elements{
         }
         return $html;
     }
-    public function progress_bar_line($caption = ''){
+    public function progress_bar_line(){
 
-            $html = '<div class="progress_bar_line" id="progress_bar_line">';
-            $html .= '<div class="progress_bar_title_line">'.$caption.'</div>';
+            $html = '<div class="progress_bar_line" id="progress_bar_line"><span class="progress_line_proc">0%</span>';
             $html .= '<div class="progress_bar_line_front"><div class="progress_bar_line_back"></div></div>';
             $html .= '</div>';
+
+        return $html;
+    }
+    public function info_box($type= ' ',$doc= ' ', $id= ' ',$fio= ' '){
+
+        $html = '<div id="info_box">';
+        $html .= '<div class="info_box info_box_type">'.$type.'</div><div class="info_box info_box_doc">'.$doc.'</div><div class="info_box info_box_id">'.$id.'</div><div class="info_box info_box_fio">'.$fio.'</div>';
+        $html .= '</div>';
 
         return $html;
     }

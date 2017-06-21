@@ -34,6 +34,7 @@ class Model_login{
 
             $_SESSION['user_id'] = $login_data['id'];
             $_SESSION['role_id'] = $login_data['role_id'];
+            $_SESSION['employee_id'] = $login_data['employee_id'];
 
             // Так же, если пользователь определен к какой-то компании, то подключаем ее;
             if($login_data['employee_id'] != ''){
@@ -51,6 +52,10 @@ class Model_login{
                 $_SESSION['control_company_name'] = $company_data['short_name'];
             }
              if($login_data['role_id']==3){// сотрудник
+                 // инициалы
+                 $employee_name = $db->row_fullname($login_data['employee_id']);
+                 $_SESSION['$employee_full_name'] = $employee_name;
+
                      $sql = "SELECT * FROM `control_tests` WHERE `company_id` = '".$company_id."';";
                      $control_test_array = $db->all($sql);
                      foreach($control_test_array as $control_tests_item) {
