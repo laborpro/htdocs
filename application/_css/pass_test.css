@@ -63,7 +63,6 @@ body{
 
 #test{
     overflow: auto;
-    max-height: 92%;
 }
 #start_test{
     display: none;

@@ -2,12 +2,13 @@
  * Created by root on 14.03.2017.
  */
 $(document).ready(function() {
+
+    // флаги док/тест
     var write_doc = 0;
-
-
-    //$(document).on("click", ".control_test_item", function () {
-        // Начинаем прохождение теста;
-        var test_id = $("#start_test").attr('test_id');
+    var go_to_testing = 0;
+    // достаём тест test_id для ajax
+    var test_id = $("#start_test").attr('test_id');
+        // стартовый запрос на сервер для запуска логики
         $.ajax({
             type: "POST",
             url: "/pass_test/start",
@@ -16,12 +17,11 @@ $(document).ready(function() {
                 write_doc:write_doc
                 },
             success: function (answer) {
-
+                //  рисуем первый тест/док
                 var result = jQuery.parseJSON(answer);
                 var request_result = result.status;
                 var request_message = result.message;
                 var content = result.content;
-
                 if(request_result == 'ok'){
                     $(".page_title").css("display","none");
                     $(".control_test_item").css("display","none");
@@ -29,20 +29,15 @@ $(document).ready(function() {
                     $("#content_box").css("padding-top","65px")
                     $('#test_block').fadeIn(0);
                     $('#content_box').html(content);
-
                 }
-
-
-
                 message(request_message, request_result);
-
             },
             error: function () {
             }
         });
     //});
 
-
+// логика работы тестов и прогресс-бара(по клику меняем состояние)
     $(document).on("click", ".test_answer", function () {
         $(this).parent('div').children('.test_answer').each(function(){
             $(this).removeClass('selected_answer');
@@ -54,7 +49,7 @@ $(document).ready(function() {
             answer_count++;
         });
 
-        var test_question = 1;
+        var test_question = 0;
         $('.test_question').each(function(){
             test_question++;
         });
@@ -139,10 +134,11 @@ $(document).ready(function() {
     $(document).on("click", "#close_test", function () {
         location.reload();
     });
-
+    // запрос второго материала по шагу
     $(document).on("click", "#go_to_testing", function () {
 
         write_doc = 1;
+        go_to_testing = 1;
         var test_id = $(this).attr('test_id');
         // Начинаем прохождение теста;
         $.ajax({
@@ -150,7 +146,8 @@ $(document).ready(function() {
             url: "/pass_test/start",
             data: {
                 test_id:test_id,
-                write_doc:write_doc
+                write_doc:write_doc,
+                go_to_testing:go_to_testing
             },
             success: function (answer) {
 
@@ -158,7 +155,7 @@ $(document).ready(function() {
                 var request_result = result.status;
                 var request_message = result.message;
                 var content = result.content;
-
+                // если 'ok' - рисуем тест
                 if(request_result == 'ok'){
                     $(".page_title").css("display","none");
                     $(".control_test_item").css("display","none");
@@ -167,13 +164,17 @@ $(document).ready(function() {
                     $('#content_box').html(content);
                     $("html, body").animate({ scrollTop: 0 }, 0);
                 }
+                // перезагружаем на следующий step, если нет теста
+                if(request_result == 'not test'){
+                    window.location = "/pass_test";
+                }
                 message(request_message, request_result);
             },
             error: function () {
             }
         });
     });
-
+    // скрипт работы кнопок навигации
     $(document).on("click", "#down", function () {
         window.scrollBy(0, 200);
     });

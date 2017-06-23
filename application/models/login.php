@@ -51,32 +51,42 @@ class Model_login{
                 $_SESSION['control_company'] = $company_id;
                 $_SESSION['control_company_name'] = $company_data['short_name'];
             }
-             if($login_data['role_id']==3){// сотрудник
-                 // инициалы
+
+            //  если пользователь сотрудник
+            if($login_data['role_id']==3){
+                           // получаем фамилию и инициалы
                  $employee_name = $db->row_fullname($login_data['employee_id']);
                  $_SESSION['$employee_full_name'] = $employee_name;
 
-                     $sql = "SELECT * FROM `control_tests` WHERE `company_id` = '".$company_id."';";
+                 // ищим непройденный материалы
+                 $sql = "SELECT route_control_step.step_content_id, route_control_step.son_step,  history_docs.date_finish
+                            FROM
+                            route_control_step
+                            LEFT JOIN history_docs
+                            ON history_docs.step_id = route_control_step.id
+                            INNER JOIN route_doc
+                            ON route_control_step.track_number_id = route_doc.id
+                            where
+                            history_docs.date_finish IS NULL
+                            and
+                            route_doc.company_id ='". $_SESSION['control_company']."';";
+
                      $control_test_array = $db->all($sql);
-                     foreach($control_test_array as $control_tests_item) {
-                         // Проверяем проходил ли пользователь это тестирование;
-                         $sql = "SELECT `date_start`, `date_end` FROM `control_tests_try_results` WHERE `test_id` = '" . $control_tests_item['id'] . "' ORDER BY `date_start` DESC LIMIT 1;";
-                         $try_data = $db->row($sql);
-                         if ($try_data['date_start'] != '') {
-                             if ($try_data['date_end'] != '') {
-                                 $result_array['status'] = 'dead_end';// сотрудник, отправляем на тесты
-                             } else {
-                                 $result_array['status'] = 'employee';// сотрудник, тестов нет
-                             }
+
+                         //  Готовим для views результат проверки
+                         if(isset($control_test_array[0])){
+
+                             $result_array['status'] = 'employee';// материалы ЕСТЬ
+                         } else {
+                             $result_array['status'] = 'dead_end';// материалов НЕТ
                          }
-                     }
              }
 
         }   else{
             $result_array['status'] = 'error';
             $result_array['message'] = 'Неверный логин или пароль!';
         }
-
+        // Отправили зезультат
         $result = json_encode($result_array, true);
         die($result);
     }

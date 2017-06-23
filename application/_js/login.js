@@ -20,19 +20,21 @@ $(document).ready(function() {
                 var login_result = result.status;
                 var login_message = result.message;
 
+                // Если компания, идём на /main
                 if(login_result == 'company'){
                     setTimeout(function(){
                         window.location = "/main";
                     }, 2000);
                 }
-                // если сотрудник кидаем на текст
+
+                // Если сотрудник не прошол материалы, идём их смотреть
                 if(login_result == 'employee'){
                     setTimeout(function(){
                         window.location = "/pass_test";
                     }, 2000);
                 }
 
-                // если сотрудник прошол все тесты
+                // Если сотрудник прошол материалы, идём в тупик
                 if(login_result == 'dead_end'){
                     setTimeout(function(){
                         window.location = "/dead_end";

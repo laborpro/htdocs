@@ -13,7 +13,7 @@ class Controller_pass_test extends Controller{
         $test_list = $this->model->load_tests_list();
 
         // Рисуем его в списке;
-        $this->view = str_replace('%tests_list%', $test_list, $this->view);
+//        $this->view = str_replace('%tests_list%', $test_list, $this->view);
 
     }
 

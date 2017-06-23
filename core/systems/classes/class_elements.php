@@ -99,7 +99,7 @@ class elements{
 
         return $html;
     }
-
+    // кнопки навигации по документы
     public function nav_button($caption = '', $class = ''){
         global $current_template;
         $html = '';
@@ -116,7 +116,7 @@ class elements{
         return $html;
     }
 
-
+    // прогресс бар - пункты
     public function progress_bar( $items= ' '){
         $html = '';
         if ($items != ''){
@@ -129,6 +129,7 @@ class elements{
         }
         return $html;
     }
+    // прогресс бар - линия(%)
     public function progress_bar_line(){
 
             $html = '<div class="progress_bar_line" id="progress_bar_line"><span class="progress_line_proc">0%</span>';
@@ -137,10 +138,11 @@ class elements{
 
         return $html;
     }
+    // информационная панель
     public function info_box($type= ' ',$doc= ' ', $id= ' ',$fio= ' '){
 
         $html = '<div id="info_box">';
-        $html .= '<div class="info_box info_box_type">'.$type.'</div><div class="info_box info_box_doc">'.$doc.'</div><div class="info_box info_box_id">'.$id.'</div><div class="info_box info_box_fio">'.$fio.'</div>';
+        $html .= '<div class="info_box info_box_type">'.$type.'</div><div class="info_box info_box_doc">'. $_SESSION['step_id'] . ' ' .$doc.'</div><div class="info_box info_box_id">'.$id.'</div><div class="info_box info_box_fio">'.$fio.'</div>';
         $html .= '</div>';
 
         return $html;
