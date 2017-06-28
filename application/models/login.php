@@ -38,18 +38,16 @@ class Model_login{
 
             // Так же, если пользователь определен к какой-то компании, то подключаем ее;
             if($login_data['employee_id'] != ''){
-                // Определяем компанию;
-                $sql = "SELECT `item_id`  FROM `employees_items_node` WHERE `employe_id` = '".$login_data['employee_id']."';";
-                $item_id = $db->one($sql);
+                // Определяем компанию и её название;
+                $sql = "SELECT	company.id, company.short_name
+                        FROM company, organization_structure, employees_items_node
+                        Where employees_items_node.org_str_id = organization_structure.id
+                        AND organization_structure.company_id = company.id
+                        AND employees_items_node.employe_id = '".$login_data['employee_id']."';";
+                $result = $db->row($sql);
 
-                $sql = "SELECT `company_id` FROM `items_control` WHERE `id` = '".$item_id."';";
-                $company_id = $db->one($sql);
-
-                $sql = "SELECT * FROM `company` WHERE `id` = '".$company_id."';";
-                $company_data = $db->row($sql);
-
-                $_SESSION['control_company'] = $company_id;
-                $_SESSION['control_company_name'] = $company_data['short_name'];
+                $_SESSION['control_company'] = $result["id"];
+                $_SESSION['control_company_name'] = $result['short_name'];
             }
 
             //  если пользователь сотрудник

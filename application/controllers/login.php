@@ -9,7 +9,7 @@ class Controller_login extends Controller{
     // model, view и pointer - объявлены в родительском классе;
 
     public function exec_default(){
-
+//        echo phpinfo();
     }
 
     // Попытка авторизаци;

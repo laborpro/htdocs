@@ -36,7 +36,7 @@ class Model_pass_test{
         // Формируем ассоциативный массив из ответа
         foreach($control_test_array as $control_tests_item){
             $link[$control_tests_item['step_id']] =
-                            [ "son_step"=>$control_tests_item['son_step'],
+                [ "son_step"=>$control_tests_item['son_step'],
                               "date_finish"=>$control_tests_item['date_finish'],
                               "step_content_id"=>$control_tests_item['step_content_id'],
                                 "step_id"=>$control_tests_item['step_id']

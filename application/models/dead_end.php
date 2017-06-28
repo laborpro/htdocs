@@ -6,6 +6,8 @@
  * Time: 15:07
  */
 class Model_dead_end{
+
+
     function __construct(){
         //echo 'Это конструкционный метод вызванный подключение модели '.__CLASS__.'<br>';
     }

@@ -9,7 +9,7 @@ class Controller_documents_download extends Controller{
     // model, view и pointer - объявлены в родительском классе;
 
     public function exec_default(){
-        // Получаем спсико документов;
+        // Получаем список документов;
         $docs_list = $this->model->get_doc_list();
 
         // Поулчаем списко сотрудников;
