@@ -34,37 +34,69 @@ class Model_documents_download{
     public function get_employees_list(){
         global $db, $elements;
 
-        $sql = "SELECT `employees`.`id`, CONCAT_WS(' ', `surname`, `employees`.`name`, `second_name`) AS `fio`, GROUP_CONCAT( CONCAT_WS(': ', `items_control_types`.`name`, `items_control`.`name`)SEPARATOR '; ') AS `items`
-            FROM `employees`, `employees_items_node`,`items_control_types` , `items_control`
-            WHERE `employees`.`id` = `employees_items_node`.`employe_id`
-            AND `employees`.`id` = `employees_items_node`.`employe_id`
-            AND `employees_items_node`.`item_id` = `items_control`.`id`
-            AND `items_control`.`type_id` = `items_control_types`.`id`
-            AND `employees`.`status` != 0
-            AND `items_control`.`company_id` = '".$_SESSION['control_company']."'
-            GROUP BY `employees`.`id`";
-        $employees = $db->all($sql);
+        $sql = "SELECT
+                CONCAT_WS (':', items_control_types.name, items_control.name) AS erarh,
+                organization_structure.`level`,
+                organization_structure.id,
+                organization_structure.left_key,
+                organization_structure.right_key,
+                employees_items_node.org_str_id as 'employee',
+                CONCAT_WS (' ',employees.surname , employees.name, employees.second_name) AS fio
+                FROM organization_structure
+                inner join items_control on organization_structure.kladr_id = items_control.id
+                inner join items_control_types on organization_structure.items_control_id = items_control_types.id
+                left join employees_items_node on employees_items_node.org_str_id = organization_structure.id
+                left join employees on employees_items_node.employe_id = employees.id
+                Where organization_structure.company_id =".$_SESSION['control_company'];
 
+        $employees = $db->all($sql);
+//        print_r($employees);
         $html = '';
 
         if(count($employees) == 0){
             $html .= $elements->small_title('У вас нет сотрудников в управляемой компании. Добавите их и вернитесь в этот раздел.');
         }   else{
             foreach($employees as $employee){
+                // Если сотрудник
+                if($employee['fio'] !="") {
+                    $array_erarh_id = array();
+                    // формируем массив потомков
+                    array_push($array_erarh_id, $employee['id']);
+                    foreach ($employees as $employee_er) {
+                        if (($employee['left_key'] >= $employee_er['left_key']) && ($employee['right_key'] <= $employee_er['right_key'])) {
+                            array_push($array_erarh_id, $employee_er['id']);
+                        }
+                    }
 
-                // разобрали, накинули теги и собрали
-                $employee_array = explode(';', $employee['items']);
-                $employee['items'] = '';
-                foreach ($employee_array as $value) {
-                    $values = explode(':', $value);
-                    $values[0] = '<b>'. $values[0] .': </b>';
-                    $employee['items'] .= $values[0] .$values[1] . '<b>;</b>';
+                    // убрали повторения из массива
+                    $array_erarh_id = array_unique($array_erarh_id);
+                    // собираем ерархию потомков
+                    foreach ($array_erarh_id as $key => $item) {
+                        foreach ($employees as $employee_ar) {
+                            if ($employee_ar['id'] == $item) {
+//                              // собираем ассоциативный массив
+                                $link[$employee_ar['level']] = [$employee_ar['erarh']];
+                            }
+
+                        }
+                    }
+                    // упорядочиваем по level
+                    ksort($link);
+                    // разобрали, накинули теги и собрали
+                    $employee_new = "";
+                    foreach ($link as $key=>$value) {
+                        $values = explode(':', $value[0]);
+                        $values[0] = '<b>' . $values[0] . ': </b>';
+                        $employee_new .= $values[0] . $values[1] . '<b>; </b>';
+                    }
+                    // добавляем строку в выдачу
+                    $html .= $elements->item_with_checkbox('ФИО: <b>' . $employee['fio'] . '</b><br>' . $employee_new, 'employee_' . $employee['id'], '', '', 'employee_id=' . $employee['id']);
+
+
                 }
-
-                $html .= $elements->item_with_checkbox('ФИО: <b>'.$employee['fio'].'</b><br>' . $employee['items'], 'employee_' . $employee['id'], '', '', 'employee_id=' . $employee['id']);
             }
         }
-
+        // отправляем на выход
         return $html;
     }
 
