@@ -30,6 +30,7 @@ class Controller_menu extends Controller{
 
             if($_SESSION['role_id'] == 1){
                 $login_buttons = '<a href="/company_control"><div class="menu_button">Компании</div></a>';
+                $login_buttons .= '<a href="/structure"><div class="menu_button">Организационная структура</div></a>';
             }
 
             if($_SESSION['role_id'] == 3){
